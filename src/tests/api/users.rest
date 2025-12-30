@@ -1,15 +1,16 @@
 ### GET request to read all users
-GET http://localhost:3001/api/v1/users
+GET http://localhost:3001/api/v2/users
 
 
 ### POST request to create a new user 
-POST http://localhost:3001/api/v1/users
+POST http://localhost:3001/api/v2/users
 Content-Type: application/json
 
 {
-  "username": "doleles",
-  "email": "doleles@example.com",
-  "password": "password101112"
+  "username": "happynewyear",
+  "email": "happynewyear@example.com",
+  "password": "12345678",
+  "role": "admin"
 }
 
 
