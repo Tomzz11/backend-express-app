@@ -1,8 +1,19 @@
 import express from "express";
 import cors from "cors";
 import { router as apiRoutes } from "./routes/index.js";
+import cookieParser from "cookie-parser";
+import helmet from "helmet";
+import { limiter } from "./middlewares/rateLimiter.js";
 
 export const app = express();
+
+// ต้องมี app.set("trust proxy", 1);  เพื่อให้ limiter ทำงาน
+// เชื่อ ip นั้นๆ ไม่ใช่เพียงแค่ vercel อย่างเดียว
+app.set("trust proxy", 1);
+
+// GLobal middleware
+app.use(helmet());
+//
 
 const corsOptions = {
     origin: [
@@ -11,11 +22,18 @@ const corsOptions = {
         "http://localhost:5175",
         "https://frontend-react-app-liart.vercel.app",
     ],
+    credentials: true,
 }; 
 
 app.use(cors(corsOptions));
 
+// GLobal middleware มี app.use(helmet()); แล้วก็ setting ดานล้า่ง
+app.use(limiter);
+
 app.use(express.json());
+
+// middleware to parse cookies (required for cookie-based auth)
+app.use(cookieParser());
 
 app.get("/", (req, res) => {
     res.send("Hello World!");
